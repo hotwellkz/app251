@@ -33,26 +33,28 @@ const WhatsAppConnect: React.FC<WhatsAppConnectProps> = () => {
     const [isReady, setIsReady] = useState<boolean>(false);
 
     useEffect(() => {
-        const newSocket = io(API_BASE_URL, SOCKET_CONFIG);
+        const newSocket = io(API_BASE_URL, {
+            ...SOCKET_CONFIG,
+            reconnection: true,
+            reconnectionAttempts: 5,
+            reconnectionDelay: 1000
+        });
 
         newSocket.on('connect', () => {
             console.log('Connected to server');
             setStatus('Подключено к серверу');
+            setSocket(newSocket);
         });
 
         newSocket.on('disconnect', () => {
             console.log('Disconnected from server');
             setStatus('Отключено от сервера');
-            setIsAuthenticated(false);
-            setIsReady(false);
         });
 
         // Обработка QR-кода
         newSocket.on('whatsapp-qr', (qr: string) => {
             console.log('Received QR code');
             setQrCodeData(qr);
-            setIsAuthenticated(false);
-            setIsReady(false);
             setStatus('Отсканируйте QR-код');
         });
 
@@ -71,28 +73,12 @@ const WhatsAppConnect: React.FC<WhatsAppConnectProps> = () => {
             setStatus('WhatsApp готов');
         });
 
-        // Обработка отключения
+        // Обработка отключения WhatsApp (не сокета)
         newSocket.on('whatsapp-disconnected', (reason: string) => {
             console.log('WhatsApp disconnected:', reason);
             setIsAuthenticated(false);
             setIsReady(false);
             setStatus('WhatsApp отключен: ' + reason);
-        });
-
-        // Обработка ошибок
-        newSocket.on('whatsapp-error', (error: string) => {
-            console.error('WhatsApp error:', error);
-            setStatus('Ошибка: ' + error);
-        });
-
-        // Получение статуса при подключении
-        newSocket.on('whatsapp-status', (status: { ready: boolean, qrCode: string | null, authenticated: boolean }) => {
-            console.log('Received WhatsApp status:', status);
-            setIsReady(status.ready);
-            setIsAuthenticated(status.authenticated);
-            if (status.qrCode) {
-                setQrCodeData(status.qrCode);
-            }
         });
 
         // Обработка входящих сообщений
@@ -102,7 +88,7 @@ const WhatsAppConnect: React.FC<WhatsAppConnectProps> = () => {
                 const chatId = message.fromMe ? message.to! : message.from;
                 const existingChat = prevChats[chatId] || {
                     phoneNumber: chatId,
-                    name: chatId,
+                    name: chatId.split('@')[0],
                     messages: [],
                     unreadCount: 0
                 };
@@ -112,8 +98,7 @@ const WhatsAppConnect: React.FC<WhatsAppConnectProps> = () => {
                     [chatId]: {
                         ...existingChat,
                         messages: [...existingChat.messages, message],
-                        lastMessage: message,
-                        unreadCount: activeChat !== chatId ? existingChat.unreadCount + 1 : 0
+                        lastMessage: message
                     }
                 };
             });
@@ -121,10 +106,14 @@ const WhatsAppConnect: React.FC<WhatsAppConnectProps> = () => {
 
         setSocket(newSocket);
 
+        // Очистка при размонтировании
         return () => {
-            newSocket.close();
+            if (newSocket) {
+                newSocket.removeAllListeners();
+                newSocket.close();
+            }
         };
-    }, [setQrCode]);
+    }, []); // Запускаем эффект только один раз при монтировании
 
     const handleSendMessage = async () => {
         if (!activeChat || !message || !isReady) return;

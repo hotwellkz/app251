@@ -405,14 +405,47 @@
         "body": "Нрот",
         "timestamp": "2025-01-29T14:02:00.000Z",
         "fromMe": false
+      },
+      {
+        "id": "1D57B3068B75C05B989E4ACBDFB076F9",
+        "from": "77475000217@c.us",
+        "to": "77477991414@c.us",
+        "body": "Готл",
+        "timestamp": "2025-01-29T14:05:02.000Z",
+        "fromMe": false
+      },
+      {
+        "id": "9098C11C81D062124DD3D8E47F679142",
+        "from": "77475000217@c.us",
+        "to": "77477991414@c.us",
+        "body": "Ролл",
+        "timestamp": "2025-01-29T14:07:23.000Z",
+        "fromMe": false
+      },
+      {
+        "id": "3EB0EF5E1A3A4AFB2DE9CD",
+        "from": "me",
+        "to": "77475000217@c.us",
+        "body": "dsd",
+        "timestamp": "2025-01-29T14:07:47.770Z",
+        "isGroup": false,
+        "fromMe": true
+      },
+      {
+        "id": "2EFE17DFDFF48C7037E7BFE7DF1B2F6A",
+        "from": "77475000217@c.us",
+        "to": "77477991414@c.us",
+        "body": "Ррть",
+        "timestamp": "2025-01-29T14:08:00.000Z",
+        "fromMe": false
       }
     ],
     "lastMessage": {
-      "id": "D6014B40963BD332AC024B7940AE5DC6",
+      "id": "2EFE17DFDFF48C7037E7BFE7DF1B2F6A",
       "from": "77475000217@c.us",
       "to": "77477991414@c.us",
-      "body": "Нрот",
-      "timestamp": "2025-01-29T14:02:00.000Z",
+      "body": "Ррть",
+      "timestamp": "2025-01-29T14:08:00.000Z",
       "fromMe": false
     }
   },
