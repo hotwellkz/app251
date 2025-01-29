@@ -505,16 +505,23 @@
         "timestamp": "2025-01-29T14:14:03.312Z",
         "isGroup": false,
         "fromMe": true
+      },
+      {
+        "id": "9EC48B7854E6FFAD42F61E00FCFB1A94",
+        "from": "77475000217@c.us",
+        "to": "77477991414@c.us",
+        "body": "Отьл",
+        "timestamp": "2025-01-29T14:21:09.000Z",
+        "fromMe": false
       }
     ],
     "lastMessage": {
-      "id": "3EB053414E2591A83FA215",
-      "from": "me",
-      "to": "77475000217@c.us",
-      "body": "fdf",
-      "timestamp": "2025-01-29T14:14:03.312Z",
-      "isGroup": false,
-      "fromMe": true
+      "id": "9EC48B7854E6FFAD42F61E00FCFB1A94",
+      "from": "77475000217@c.us",
+      "to": "77477991414@c.us",
+      "body": "Отьл",
+      "timestamp": "2025-01-29T14:21:09.000Z",
+      "fromMe": false
     }
   },
   "77072140274@c.us": {

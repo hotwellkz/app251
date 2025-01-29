@@ -16,8 +16,8 @@ const corsOptions = {
     origin: [
         'http://localhost:5173',
         'http://localhost:5174',
-        'https://2wix.ru',
-        'https://your-netlify-site.netlify.app'
+        'http://localhost:4173',  // Vite preview port
+        'http://localhost:4174'   // Vite preview alternative port
     ],
     methods: ['GET', 'POST', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Accept'],
@@ -33,8 +33,8 @@ const io = new Server(httpServer, {
         origin: [
             'http://localhost:5173',
             'http://localhost:5174',
-            'https://2wix.ru',
-            'https://your-netlify-site.netlify.app'
+            'http://localhost:4173',  // Vite preview port
+            'http://localhost:4174'   // Vite preview alternative port
         ],
         methods: ["GET", "POST"],
         credentials: true
@@ -285,7 +285,7 @@ app.post('/send-message', async (req, res) => {
 
         // Создаем и сохраняем сообщение локально
         const sentMessage: ChatMessage = {
-            id: response.id.id,
+            id: response.id.id, // Добавляем ID сообщения
             from: 'me',
             to: formattedNumber,
             body: message,
