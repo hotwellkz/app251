@@ -26,34 +26,36 @@ const WhatsAppContent: React.FC = () => {
     };
 
     return (
-        <div className="h-screen bg-[#f0f2f5] relative">
+        <div className="h-screen bg-[#f0f2f5] relative flex flex-col">
             {/* Верхняя панель */}
             <div className="w-full bg-[#00a884] px-4 py-2 flex justify-between items-center">
                 <div className="flex items-center gap-4">
-                    <span className="text-white">Подключено к серверу</span>
+                    <span className="text-white hidden md:inline">Подключено к серверу</span>
                     <div 
                         className="cursor-pointer flex items-center gap-2 text-white"
                         onClick={() => setShowQRCode(true)}
                     >
                         <MdQrCode2 className="w-6 h-6" />
-                        <span className="text-sm">Сканировать QR-код</span>
+                        <span className="text-sm hidden md:inline">Сканировать QR-код</span>
                     </div>
                     <div 
                         className="cursor-pointer flex items-center gap-2 text-white"
                         onClick={() => setShowNewContact(true)}
                     >
                         <MdPersonAdd className="w-6 h-6" />
-                        <span className="text-sm">Новый контакт</span>
+                        <span className="text-sm hidden md:inline">Новый контакт</span>
                     </div>
                 </div>
             </div>
 
-            <WhatsAppConnect serverUrl="http://localhost:3000" />
+            <div className="flex-1 overflow-hidden">
+                <WhatsAppConnect serverUrl="http://localhost:3000" />
+            </div>
 
-            {/* Модальное окно с QR-кодом */}
+            {/* Модальные окна */}
             {showQRCode && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white rounded-lg p-6 relative">
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                    <div className="bg-white rounded-lg p-6 relative max-w-md w-full">
                         <button 
                             className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
                             onClick={() => setShowQRCode(false)}
@@ -65,10 +67,9 @@ const WhatsAppContent: React.FC = () => {
                 </div>
             )}
 
-            {/* Модальное окно создания контакта */}
             {showNewContact && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white rounded-lg p-6 relative w-96">
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                    <div className="bg-white rounded-lg p-6 relative max-w-md w-full">
                         <button 
                             className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
                             onClick={() => {
