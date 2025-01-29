@@ -36,10 +36,48 @@ const io = new Server(httpServer, {
 const client = new Client({
     authStrategy: new LocalAuth(),
     puppeteer: {
-        args: ['--no-sandbox'],
-        headless: true
+        headless: true,
+        args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-dev-shm-usage',
+            '--disable-accelerated-2d-canvas',
+            '--no-first-run',
+            '--no-zygote',
+            '--disable-gpu'
+        ],
+        defaultViewport: {
+            width: 1280,
+            height: 720
+        }
     }
 });
+
+// Добавляем обработчик ошибок для клиента
+client.on('disconnected', (reason) => {
+    console.log('Client was logged out', reason);
+    // Попытка переподключения
+    setTimeout(() => {
+        client.initialize();
+    }, 5000);
+});
+
+// Добавляем обработчик для отслеживания состояния подключения
+let clientReady = false;
+client.on('ready', () => {
+    clientReady = true;
+    console.log('Client is ready!');
+});
+
+client.on('auth_failure', () => {
+    clientReady = false;
+    console.log('Auth failure, restarting...');
+});
+
+// Функция для проверки готовности клиента
+const isClientReady = () => {
+    return clientReady && client.pupPage && client.pupBrowser;
+};
 
 // API endpoint для получения сохраненных чатов
 app.get('/chats', (req, res) => {
@@ -207,6 +245,14 @@ app.post('/send-message', async (req, res) => {
             });
         }
 
+        // Проверяем готовность клиента
+        if (!isClientReady()) {
+            return res.status(503).json({
+                success: false,
+                error: 'WhatsApp клиент не готов. Пожалуйста, подождите или отсканируйте QR-код заново'
+            });
+        }
+
         console.log('Отправка сообщения:', { phoneNumber, message });
 
         // Форматируем номер телефона
@@ -214,13 +260,30 @@ app.post('/send-message', async (req, res) => {
             ? phoneNumber 
             : `${phoneNumber.replace(/[^\d]/g, '')}@c.us`;
 
+        // Проверяем, зарегистрирован ли номер в WhatsApp
+        try {
+            const isRegistered = await client.isRegisteredUser(formattedNumber);
+            if (!isRegistered) {
+                return res.status(404).json({
+                    success: false,
+                    error: 'Номер не зарегистрирован в WhatsApp'
+                });
+            }
+        } catch (error) {
+            console.error('Ошибка при проверке номера:', error);
+            return res.status(500).json({
+                success: false,
+                error: 'Ошибка при проверке номера в WhatsApp'
+            });
+        }
+
         // Отправляем сообщение
         const response = await client.sendMessage(formattedNumber, message);
         console.log('Сообщение отправлено:', response);
 
         // Создаем и сохраняем сообщение локально
         const sentMessage: ChatMessage = {
-            id: response.id.id, // Добавляем ID сообщения
+            id: response.id.id,
             from: 'me',
             to: formattedNumber,
             body: message,
@@ -242,9 +305,19 @@ app.post('/send-message', async (req, res) => {
         });
     } catch (error) {
         console.error('Ошибка при отправке сообщения:', error);
+        
+        // Если клиент отключился, пытаемся переинициализировать
+        if (!isClientReady()) {
+            try {
+                await client.initialize();
+            } catch (initError) {
+                console.error('Ошибка при переинициализации клиента:', initError);
+            }
+        }
+        
         res.status(500).json({ 
             success: false, 
-            error: 'Ошибка при отправке сообщения' 
+            error: error instanceof Error ? error.message : 'Ошибка при отправке сообщения'
         });
     }
 });

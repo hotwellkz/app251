@@ -4,6 +4,7 @@ import { WhatsAppMessage } from '../types/WhatsAppTypes';
 import { useChat } from '../context/ChatContext';
 import ChatList from './ChatList';
 import ChatWindow from './ChatWindow';
+import { API_BASE_URL, SOCKET_CONFIG } from '../config/api';
 
 interface WhatsAppConnectProps {
     serverUrl: string;
@@ -79,9 +80,7 @@ const WhatsAppConnect: React.FC<WhatsAppConnectProps> = ({ serverUrl }) => {
     };
 
     useEffect(() => {
-        const newSocket = io('http://localhost:3000', {
-            withCredentials: true
-        });
+        const newSocket = io(API_BASE_URL, SOCKET_CONFIG);
 
         newSocket.on('connect', () => {
             setStatus('Подключено к серверу');
@@ -148,7 +147,7 @@ const WhatsAppConnect: React.FC<WhatsAppConnectProps> = ({ serverUrl }) => {
         setSocket(newSocket);
 
         // Загружаем историю чатов при подключении
-        fetch('http://localhost:3000/chats', {
+        fetch(`${API_BASE_URL}/chats`, {
             credentials: 'include'
         })
             .then(response => response.json())
@@ -169,7 +168,7 @@ const WhatsAppConnect: React.FC<WhatsAppConnectProps> = ({ serverUrl }) => {
         if (!activeChat || !message) return;
 
         try {
-            const response = await fetch('http://localhost:3000/send-message', {
+            const response = await fetch(`${API_BASE_URL}/send-message`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -171,14 +171,57 @@
         "body": "Ртлл",
         "timestamp": "2025-01-29T12:54:43.000Z",
         "fromMe": false
+      },
+      {
+        "id": "3EB05743B71482C1064079",
+        "from": "me",
+        "to": "77475000217@c.us",
+        "body": "dfsd",
+        "timestamp": "2025-01-29T13:11:53.806Z",
+        "isGroup": false,
+        "fromMe": true
+      },
+      {
+        "id": "9E0A70937AA4144E5E9DE926B934CBD6",
+        "from": "77475000217@c.us",
+        "to": "77477991414@c.us",
+        "body": "Рттл",
+        "timestamp": "2025-01-29T13:13:56.000Z",
+        "fromMe": false
+      },
+      {
+        "id": "3EB0AD87F0E3132EFACDFA",
+        "from": "me",
+        "to": "77475000217@c.us",
+        "body": "роод",
+        "timestamp": "2025-01-29T13:16:07.303Z",
+        "isGroup": false,
+        "fromMe": true
+      },
+      {
+        "id": "3EB04E85290CED9D51C4E6",
+        "from": "me",
+        "to": "77475000217@c.us",
+        "body": "лолл",
+        "timestamp": "2025-01-29T13:16:29.179Z",
+        "isGroup": false,
+        "fromMe": true
+      },
+      {
+        "id": "47A2ED34F9B6259B4394944F0A3D958A",
+        "from": "77475000217@c.us",
+        "to": "77477991414@c.us",
+        "body": "Нолл",
+        "timestamp": "2025-01-29T13:16:52.000Z",
+        "fromMe": false
       }
     ],
     "lastMessage": {
-      "id": "A566828A142ED49824FED2A9B18BBBA0",
+      "id": "47A2ED34F9B6259B4394944F0A3D958A",
       "from": "77475000217@c.us",
       "to": "77477991414@c.us",
-      "body": "Ртлл",
-      "timestamp": "2025-01-29T12:54:43.000Z",
+      "body": "Нолл",
+      "timestamp": "2025-01-29T13:16:52.000Z",
       "fromMe": false
     }
   },
@@ -261,5 +304,12 @@
     "messages": [],
     "createdAt": "2025-01-29T12:52:49.943Z",
     "updatedAt": "2025-01-29T12:52:49.943Z"
+  },
+  "77477991414@c.us": {
+    "phoneNumber": "77477991414@c.us",
+    "name": "77477991414",
+    "messages": [],
+    "createdAt": "2025-01-29T13:10:45.858Z",
+    "updatedAt": "2025-01-29T13:10:45.858Z"
   }
 }
