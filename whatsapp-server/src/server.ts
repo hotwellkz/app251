@@ -13,7 +13,12 @@ const httpServer = createServer(app);
 
 // Настройка CORS для Express
 const corsOptions = {
-    origin: ['http://localhost:5173', 'http://localhost:5174', 'https://2wix.ru'],
+    origin: [
+        'http://localhost:5173',
+        'http://localhost:5174',
+        'https://2wix.ru',
+        'https://your-netlify-site.netlify.app'
+    ],
     methods: ['GET', 'POST', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Accept'],
     credentials: true
@@ -25,7 +30,12 @@ app.use(express.json());
 // Настройка Socket.IO с CORS
 const io = new Server(httpServer, {
     cors: {
-        origin: ['http://localhost:5173', 'http://localhost:5174', 'https://2wix.ru'],
+        origin: [
+            'http://localhost:5173',
+            'http://localhost:5174',
+            'https://2wix.ru',
+            'https://your-netlify-site.netlify.app'
+        ],
         methods: ["GET", "POST"],
         credentials: true
     },
