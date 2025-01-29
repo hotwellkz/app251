@@ -42,7 +42,6 @@ const WhatsAppConnect: React.FC<WhatsAppConnectProps> = () => {
 
         newSocket.on('connect', () => {
             console.log('Connected to server');
-            setStatus('Подключено к серверу');
             setSocket(newSocket);
         });
 
@@ -63,14 +62,14 @@ const WhatsAppConnect: React.FC<WhatsAppConnectProps> = () => {
             console.log('WhatsApp authenticated');
             setIsAuthenticated(true);
             setQrCodeData(null);
-            setStatus('Аутентифицировано');
+            setStatus('WhatsApp готов к работе');
         });
 
         // Обработка готовности
         newSocket.on('whatsapp-ready', () => {
             console.log('WhatsApp ready');
             setIsReady(true);
-            setStatus('WhatsApp готов');
+            setStatus('WhatsApp готов к работе');
         });
 
         // Обработка отключения WhatsApp (не сокета)
@@ -124,23 +123,22 @@ const WhatsAppConnect: React.FC<WhatsAppConnectProps> = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                credentials: 'include',
                 body: JSON.stringify({
                     phoneNumber: activeChat,
-                    message,
-                }),
+                    message: message
+                })
             });
 
-            const data = await response.json();
-
             if (!response.ok) {
-                throw new Error(data.error || 'Ошибка при отправке сообщения');
+                const error = await response.json();
+                throw new Error(error.error || 'Ошибка при отправке сообщения');
             }
 
+            // Очищаем поле сообщения только после успешной отправки
             setMessage('');
         } catch (error) {
             console.error('Ошибка при отправке сообщения:', error);
-            alert(error instanceof Error ? error.message : 'Ошибка при отправке сообщения');
+            setStatus('Ошибка при отправке сообщения');
         }
     };
 
